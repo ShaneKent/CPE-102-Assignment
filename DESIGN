@@ -1,1 +1,47 @@
+class: Point
+attributes:
+   x: number
+   y: number
+methods:
 
+
+class: Background
+attributes:
+   name: string
+   imgs: Pictures (not actually a defined class)
+   current_img: number
+methods:
+
+
+class: MinerNotFull
+attributes:
+   name: string
+   position: Point object
+   rate: global number (random between MINER_RATE_MIN and MINER_RATE_MAX)
+   imgs: Pictures (not actually a defined class)
+   current_img: number
+   resource_limit: global number (MINER_LIMIT)
+   resource_count: number
+   animation_rate: number
+   pending_actions: list of _____
+methods:
+
+
+class: MinerFull
+attributes:
+   name: string
+   position: ____
+   rate: ____
+   imgs: Pictures (not actually a defined class)
+   current_img: number
+   resource_limit: number
+   resource_count: number
+   animation_rate: number
+   pending_actions: list of ____
+methods:
+
+
+class: Vein
+attributes:
+   name: string
+   position: ____

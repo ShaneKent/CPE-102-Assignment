@@ -19,6 +19,12 @@ class MinerNotFull:
       self.resource_count = 0
       self.animation_rate = animation_rate
       self.pending_actions = []
+      
+   def set_position(self, point):
+      self.position = point
+
+   def get_position(self):
+      return self.position
 
 class MinerFull:
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -32,6 +38,13 @@ class MinerFull:
       self.resource_count = resource_limit
       self.animation_rate = animation_rate
       self.pending_actions = []
+      
+   def set_position(self, point):
+      self.position = point
+      
+   def get_position(self):
+      return self.position
+
 
 class Vein:
    def __init__(self, name, rate, position, imgs, resource_distance=1):
@@ -42,6 +55,12 @@ class Vein:
       self.current_img = 0
       self.resource_distance = resource_distance
       self.pending_actions = []
+   
+   def set_position(self, point):
+      self.position = point
+
+   def get_position(self):
+      return self.position
 
 class Ore:
    def __init__(self, name, position, imgs, rate=5000):
@@ -51,6 +70,12 @@ class Ore:
       self.current_img = 0
       self.rate = rate
       self.pending_actions = []
+   
+   def set_position(self, point):
+      self.position = point
+
+   def get_position(self):
+      return self.position
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
@@ -64,6 +89,12 @@ class Blacksmith:
       self.rate = rate
       self.resource_distance = resource_distance
       self.pending_actions = []
+   
+   def set_position(self, point):
+      self.position = point
+   
+   def get_position(self):
+      return self.position
 
 class Obstacle:
    def __init__(self, name, position, imgs):
@@ -71,6 +102,12 @@ class Obstacle:
       self.position = position
       self.imgs = imgs
       self.current_img = 0
+      
+   def set_position(self, point):
+      self.position = point
+
+   def get_position(self):
+      return self.position
 
 class OreBlob:
    def __init__(self, name, position, rate, imgs, animation_rate):
@@ -81,6 +118,12 @@ class OreBlob:
       self.current_img = 0
       self.animation_rate = animation_rate
       self.pending_actions = []
+   
+   def set_position(self, point):
+      self.position = point
+   
+   def get_position(self):
+      return self.position
 
 class Quake:
    def __init__(self, name, position, imgs, animation_rate):
@@ -91,14 +134,12 @@ class Quake:
       self.animation_rate = animation_rate
       self.pending_actions = []
 
-
-def set_position(entity, point):
-   entity.position = point
-
-def get_position(entity):
-   return entity.position
-
-
+   def set_position(self, point):
+      self.position = point
+   
+   def get_position(self):
+      return self.position   
+      
 def get_images(entity):
    return entity.imgs
 

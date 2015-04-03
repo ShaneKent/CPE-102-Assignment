@@ -22,7 +22,7 @@ VEIN_SPAWN_DELAY = 500
 VEIN_RATE_MIN = 8000
 VEIN_RATE_MAX = 17000
 
-
+#move to point.py in Point class. need to change syntax.
 def sign(x):
    if x < 0:
       return -1
@@ -31,12 +31,12 @@ def sign(x):
    else:
       return 0
 
-
+#move to point.py in Point class.
 def adjacent(pt1, pt2):
    return ((pt1.x == pt2.x and abs(pt1.y - pt2.y) == 1) or
       (pt1.y == pt2.y and abs(pt1.x - pt2.x) == 1))
 
-
+#move to point.py in Point class.
 def next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
    new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
@@ -50,7 +50,7 @@ def next_position(world, entity_pt, dest_pt):
 
    return new_pt
 
-
+#move to point.py in Point class.
 def blob_next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
    new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
@@ -70,10 +70,10 @@ def blob_next_position(world, entity_pt, dest_pt):
 
 
 def miner_to_ore(world, entity, ore):
-   entity_pt = entities.get_position(entity)
+   entity_pt = entity.get_position()
    if not ore:
       return ([entity_pt], False)
-   ore_pt = entities.get_position(ore)
+   ore_pt = ore.get_position()
    if adjacent(entity_pt, ore_pt):
       entities.set_resource_count(entity,
          1 + entities.get_resource_count(entity))
@@ -85,10 +85,10 @@ def miner_to_ore(world, entity, ore):
 
 
 def miner_to_smith(world, entity, smith):
-   entity_pt = entities.get_position(entity)
+   entity_pt = entity.get_position()
    if not smith:
       return ([entity_pt], False)
-   smith_pt = entities.get_position(smith)
+   smith_pt = smith.get_position()
    if adjacent(entity_pt, smith_pt):
       entities.set_resource_count(smith,
          entities.get_resource_count(smith) +
@@ -104,7 +104,7 @@ def create_miner_not_full_action(world, entity, i_store):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
 
-      entity_pt = entities.get_position(entity)
+      entity_pt = entity.get_position()
       ore = worldmodel.find_nearest(world, entity_pt, entities.Ore)
       (tiles, found) = miner_to_ore(world, entity, ore)
 
@@ -124,7 +124,7 @@ def create_miner_full_action(world, entity, i_store):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
 
-      entity_pt = entities.get_position(entity)
+      entity_pt = entity.get_position()
       smith = worldmodel.find_nearest(world, entity_pt, entities.Blacksmith)
       (tiles, found) = miner_to_smith(world, entity, smith)
 
@@ -141,10 +141,10 @@ def create_miner_full_action(world, entity, i_store):
 
 
 def blob_to_vein(world, entity, vein):
-   entity_pt = entities.get_position(entity)
+   entity_pt = entity.get_position()
    if not vein:
       return ([entity_pt], False)
-   vein_pt = entities.get_position(vein)
+   vein_pt = vein.get_position()
    if adjacent(entity_pt, vein_pt):
       remove_entity(world, vein)
       return ([vein_pt], True)
@@ -160,7 +160,7 @@ def create_ore_blob_action(world, entity, i_store):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
 
-      entity_pt = entities.get_position(entity)
+      entity_pt = entity.get_position()
       vein = worldmodel.find_nearest(world, entity_pt, entities.Vein)
       (tiles, found) = blob_to_vein(world, entity, vein)
 
@@ -194,7 +194,7 @@ def create_vein_action(world, entity, i_store):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
 
-      open_pt = find_open_around(world, entities.get_position(entity),
+      open_pt = find_open_around(world, entity.get_position(),
          entities.get_resource_distance(entity))
       if open_pt:
          ore = create_ore(world,
@@ -215,7 +215,7 @@ def create_vein_action(world, entity, i_store):
 def try_transform_miner_full(world, entity):
    new_entity = entities.MinerNotFull(
       entities.get_name(entity), entities.get_resource_limit(entity),
-      entities.get_position(entity), entities.get_rate(entity),
+      entity.get_position(), entities.get_rate(entity),
       entities.get_images(entity), entities.get_animation_rate(entity))
 
    return new_entity
@@ -227,7 +227,7 @@ def try_transform_miner_not_full(world, entity):
    else:
       new_entity = entities.MinerFull(
          entities.get_name(entity), entities.get_resource_limit(entity),
-         entities.get_position(entity), entities.get_rate(entity),
+         entity.get_position(), entities.get_rate(entity),
          entities.get_images(entity), entities.get_animation_rate(entity))
       return new_entity
 
@@ -236,7 +236,7 @@ def try_transform_miner(world, entity, transform):
    new_entity = transform(world, entity)
    if entity != new_entity:
       clear_pending_actions(world, entity)
-      worldmodel.remove_entity_at(world, entities.get_position(entity))
+      worldmodel.remove_entity_at(world, entity.get_position())
       worldmodel.add_entity(world, new_entity)
       schedule_animation(world, new_entity)
 
@@ -261,14 +261,14 @@ def create_animation_action(world, entity, repeat_count):
             create_animation_action(world, entity, max(repeat_count - 1, 0)),
             current_ticks + entities.get_animation_rate(entity))
 
-      return [entities.get_position(entity)]
+      return [entity.get_position()]
    return action
 
 
 def create_entity_death_action(world, entity):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
-      pt = entities.get_position(entity)
+      pt = entity.get_position()
       remove_entity(world, entity)
       return [pt]
    return action
@@ -278,14 +278,14 @@ def create_ore_transform_action(world, entity, i_store):
    def action(current_ticks):
       entities.remove_pending_action(entity, action)
       blob = create_blob(world, entities.get_name(entity) + " -- blob",
-         entities.get_position(entity),
+         entity.get_position(),
          entities.get_rate(entity) // BLOB_RATE_SCALE,
          current_ticks, i_store)
 
       remove_entity(world, entity)
       worldmodel.add_entity(world, blob)
 
-      return [entities.get_position(blob)]
+      return [blob.get_position()]
    return action
 
 
