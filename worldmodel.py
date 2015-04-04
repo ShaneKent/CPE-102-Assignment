@@ -107,7 +107,7 @@ def update_on_time(world, ticks):
 
 def get_background_image(world, pt):
    if within_bounds(world, pt):
-      return entities.get_image(occ_grid.get_cell(world.background, pt))
+      return occ_grid.get_cell(world.background, pt).get_image()
 
 
 def get_background(world, pt):

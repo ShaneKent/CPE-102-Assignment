@@ -52,7 +52,7 @@ def draw_entities(view):
    for entity in view.world.entities:
       if view.viewport.collidepoint(entity.position.x, entity.position.y):
          v_pt = world_to_viewport(view.viewport, entity.position)
-         view.screen.blit(entities.get_image(entity),
+         view.screen.blit(entity.get_image(),
             (v_pt.x * view.tile_width, v_pt.y * view.tile_height))
 
 
@@ -99,7 +99,7 @@ def get_tile_image(view, view_tile_pt):
    if occupant:
       img = pygame.Surface((view.tile_width, view.tile_height))
       img.blit(bgnd, (0, 0))
-      img.blit(entities.get_image(occupant), (0,0))
+      img.blit(occupant.get_image(), (0,0))
       return img
    else:
       return bgnd
