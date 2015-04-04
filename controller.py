@@ -24,7 +24,7 @@ def mouse_to_tile(pos, tile_width, tile_height):
 
 
 def handle_timer_event(world, view):
-   rects = worldmodel.update_on_time(world, pygame.time.get_ticks())
+   rects = world.update_on_time(pygame.time.get_ticks())
    worldview.update_view_tiles(view, rects)
 
 
