@@ -40,7 +40,7 @@ def main():
    view = worldview.WorldView(SCREEN_WIDTH // TILE_WIDTH,
       SCREEN_HEIGHT // TILE_HEIGHT, screen, world, TILE_WIDTH, TILE_HEIGHT)
 
-   worldview.update_view(view)
+   view.update_view()
 
    builder_controller.activity_loop(view, world, i_store)
 
