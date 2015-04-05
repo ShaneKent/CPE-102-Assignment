@@ -51,6 +51,7 @@ VEIN_COL = 2
 VEIN_ROW = 3
 VEIN_REACH = 5
 
+#  START THE MOVE TO WORLDMODEL
 
 def save_world(world, file):
    save_entities(world, file)
@@ -94,6 +95,8 @@ def add_entity(world, properties, i_store, run):
       world.add_entity(new_entity)
       if run:
          schedule_entity(world, new_entity, i_store)
+
+#  END THE MOVE
 
 
 def create_from_properties(properties, i_store):
