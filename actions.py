@@ -61,7 +61,7 @@ def blob_next_position(world, entity_pt, dest_pt):
    return new_pt
 
 def miner_to_ore(world, entity, ore):
-   entity_pt = get_position()
+   entity_pt = entity.get_position()
    if not ore:
       return ([entity_pt], False)
    ore_pt = ore.get_position()
