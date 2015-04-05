@@ -2,15 +2,15 @@ import entities
 import pygame
 import ordered_list
 import actions
-from occ_grid import *
+import occ_grid
 import point
 
 class WorldModel:
    def __init__(self, num_rows, num_cols, background):
-      self.background = Grid(num_cols, num_rows, background)
+      self.background = occ_grid.Grid(num_cols, num_rows, background)
       self.num_rows = num_rows
       self.num_cols = num_cols
-      self.occupancy = Grid(num_cols, num_rows, None)
+      self.occupancy = occ_grid.Grid(num_cols, num_rows, None)
       self.entities = []
       self.action_queue = ordered_list.OrderedList()
 
