@@ -1,10 +1,10 @@
-import entities
-import worldmodel
-import pygame
+from entities import *
+from worldmodel import *
+from pygame import *
 import math
 import random
-import point
-import image_store
+from point import *
+from image_store import *
 
 BLOB_RATE_SCALE = 4
 BLOB_ANIMATION_RATE_SCALE = 50
@@ -32,36 +32,36 @@ def sign(x):
 
 def next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
+   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
 
    if horiz == 0 or world.is_occupied(new_pt):
       vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
+      new_pt = Point(entity_pt.x, entity_pt.y + vert)
 
       if vert == 0 or world.is_occupied(new_pt):
-         new_pt = point.Point(entity_pt.x, entity_pt.y)
+         new_pt = Point(entity_pt.x, entity_pt.y)
 
    return new_pt
 
 def blob_next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
+   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
 
    if horiz == 0 or (world.is_occupied(new_pt) and
       not isinstance(world.get_tile_occupant(new_pt),
-      entities.Ore)):
+      Ore)):
       vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
+      new_pt = Point(entity_pt.x, entity_pt.y + vert)
 
       if vert == 0 or (world.is_occupied(new_pt) and
          not isinstance(world.get_tile_occupant(new_pt),
-         entities.Ore)):
-         new_pt = point.Point(entity_pt.x, entity_pt.y)
+         Ore)):
+         new_pt = Point(entity_pt.x, entity_pt.y)
 
    return new_pt
 
 def miner_to_ore(world, entity, ore):
-   entity_pt = entity.get_position()
+   entity_pt = get_position()
    if not ore:
       return ([entity_pt], False)
    ore_pt = ore.get_position()
@@ -93,7 +93,7 @@ def create_miner_not_full_action(world, entity, i_store):
       entity.remove_pending_action(action)
 
       entity_pt = entity.get_position()
-      ore = world.find_nearest(entity_pt, entities.Ore)
+      ore = world.find_nearest(entity_pt, Ore)
       (tiles, found) = miner_to_ore(world, entity, ore)
 
       new_entity = entity
@@ -113,7 +113,7 @@ def create_miner_full_action(world, entity, i_store):
       entity.remove_pending_action(action)
 
       entity_pt = entity.get_position()
-      smith = world.find_nearest(entity_pt, entities.Blacksmith)
+      smith = world.find_nearest(entity_pt, Blacksmith)
       (tiles, found) = miner_to_smith(world, entity, smith)
 
       new_entity = entity
@@ -139,7 +139,7 @@ def blob_to_vein(world, entity, vein):
    else:
       new_pt = blob_next_position(world, entity_pt, vein_pt)
       old_entity = world.get_tile_occupant(new_pt)
-      if isinstance(old_entity, entities.Ore):
+      if isinstance(old_entity, Ore):
          remove_entity(world, old_entity)
       return (world.move_entity(entity, new_pt), False)
 
@@ -149,7 +149,7 @@ def create_ore_blob_action(world, entity, i_store):
       entity.remove_pending_action(action)
 
       entity_pt = entity.get_position()
-      vein = world.find_nearest(entity_pt, entities.Vein)
+      vein = world.find_nearest(entity_pt, Vein)
       (tiles, found) = blob_to_vein(world, entity, vein)
 
       next_time = current_ticks + entity.get_rate()
@@ -169,7 +169,7 @@ def create_ore_blob_action(world, entity, i_store):
 def find_open_around(world, pt, distance):
    for dy in range(-distance, distance + 1):
       for dx in range(-distance, distance + 1):
-         new_pt = point.Point(pt.x + dx, pt.y + dy)
+         new_pt = Point(pt.x + dx, pt.y + dy)
 
          if (world.within_bounds(new_pt) and
             (not world.is_occupied(new_pt))):
@@ -201,7 +201,7 @@ def create_vein_action(world, entity, i_store):
 
 
 def try_transform_miner_full(world, entity):
-   new_entity = entities.MinerNotFull(
+   new_entity = MinerNotFull(
       entity.get_name(), entity.get_resource_limit(),
       entity.get_position(), entity.get_rate(),
       entity.get_images(), entity.get_animation_rate())
@@ -213,7 +213,7 @@ def try_transform_miner_not_full(world, entity):
    if entity.resource_count < entity.resource_limit:
       return entity
    else:
-      new_entity = entities.MinerFull(
+      new_entity = MinerFull(
          entity.get_name(), entity.get_resource_limit(),
          entity.get_position(), entity.get_rate(),
          entity.get_images(), entity.get_animation_rate())
@@ -232,7 +232,7 @@ def try_transform_miner(world, entity, transform):
 
 
 def create_miner_action(world, entity, image_store):
-   if isinstance(entity, entities.MinerNotFull):
+   if isinstance(entity, MinerNotFull):
       return create_miner_not_full_action(world, entity, image_store)
    else:
       return create_miner_full_action(world, entity, image_store)
@@ -285,8 +285,8 @@ def remove_entity(world, entity):
 
 
 def create_blob(world, name, pt, rate, ticks, i_store):
-   blob = entities.OreBlob(name, pt, rate,
-      image_store.get_images(i_store, 'blob'),
+   blob = OreBlob(name, pt, rate,
+      get_images(i_store, 'blob'),
       random.randint(BLOB_ANIMATION_MIN, BLOB_ANIMATION_MAX)
       * BLOB_ANIMATION_RATE_SCALE)
    schedule_blob(world, blob, ticks, i_store)
@@ -306,7 +306,7 @@ def schedule_miner(world, miner, ticks, i_store):
 
 
 def create_ore(world, name, pt, ticks, i_store):
-   ore = entities.Ore(name, pt, image_store.get_images(i_store, 'ore'),
+   ore = Ore(name, pt, get_images(i_store, 'ore'),
       random.randint(ORE_CORRUPT_MIN, ORE_CORRUPT_MAX))
    schedule_ore(world, ore, ticks, i_store)
 
@@ -320,8 +320,8 @@ def schedule_ore(world, ore, ticks, i_store):
 
 
 def create_quake(world, pt, ticks, i_store):
-   quake = entities.Quake("quake", pt,
-      image_store.get_images(i_store, 'quake'), QUAKE_ANIMATION_RATE)
+   quake = Quake("quake", pt,
+      get_images(i_store, 'quake'), QUAKE_ANIMATION_RATE)
    schedule_quake(world, quake, ticks)
    return quake
 
@@ -333,9 +333,9 @@ def schedule_quake(world, quake, ticks):
 
 
 def create_vein(world, name, pt, ticks, i_store):
-   vein = entities.Vein("vein" + name,
+   vein = Vein("vein" + name,
       random.randint(VEIN_RATE_MIN, VEIN_RATE_MAX),
-      pt, image_store.get_images(i_store, 'vein'))
+      pt, get_images(i_store, 'vein'))
    return vein
 
 
