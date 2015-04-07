@@ -1,9 +1,9 @@
 import entities
-from worldmodel import *
+import worldmodel
 from pygame import *
 import math
 import random
-from point import *
+import point
 from image_store import *
 
 BLOB_RATE_SCALE = 4
@@ -35,31 +35,31 @@ def sign(x):
 
 def next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
+   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
 
    if horiz == 0 or world.is_occupied(new_pt):
       vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = Point(entity_pt.x, entity_pt.y + vert)
+      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
 
       if vert == 0 or world.is_occupied(new_pt):
-         new_pt = Point(entity_pt.x, entity_pt.y)
+         new_pt = point.Point(entity_pt.x, entity_pt.y)
 
    return new_pt
 
 def blob_next_position(world, entity_pt, dest_pt):
    horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
+   new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
 
    if horiz == 0 or (world.is_occupied(new_pt) and
       not isinstance(world.get_tile_occupant(new_pt),
       entities.Ore)):
       vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = Point(entity_pt.x, entity_pt.y + vert)
+      new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
 
       if vert == 0 or (world.is_occupied(new_pt) and
          not isinstance(world.get_tile_occupant(new_pt),
          entities.Ore)):
-         new_pt = Point(entity_pt.x, entity_pt.y)
+         new_pt = point.Point(entity_pt.x, entity_pt.y)
 
    return new_pt
 
@@ -67,7 +67,7 @@ def blob_next_position(world, entity_pt, dest_pt):
 def find_open_around(world, pt, distance):
    for dy in range(-distance, distance + 1):
       for dx in range(-distance, distance + 1):
-         new_pt = Point(pt.x + dx, pt.y + dy)
+         new_pt = point.Point(pt.x + dx, pt.y + dy)
 
          if (world.within_bounds(new_pt) and
             (not world.is_occupied(new_pt))):
@@ -127,7 +127,7 @@ def remove_entity(world, entity):
 
 def create_blob(world, name, pt, rate, ticks, i_store):
    blob = entities.OreBlob(name, pt, rate,
-      get_images(i_store, 'blob'),
+      image_store.get_images(i_store, 'blob'),
       random.randint(BLOB_ANIMATION_MIN, BLOB_ANIMATION_MAX)
       * BLOB_ANIMATION_RATE_SCALE)
    schedule_blob(world, blob, ticks, i_store)
@@ -151,7 +151,7 @@ def schedule_ore(world, ore, ticks, i_store):
 
 def create_quake(world, pt, ticks, i_store):
    quake = entities.Quake("quake", pt,
-      get_images(i_store, 'quake'), QUAKE_ANIMATION_RATE)
+      image_store.get_images(i_store, 'quake'), QUAKE_ANIMATION_RATE)
    schedule_quake(world, quake, ticks)
    return quake
 
@@ -165,7 +165,7 @@ def schedule_quake(world, quake, ticks):
 def create_vein(world, name, pt, ticks, i_store):
    vein = entities.Vein("vein" + name,
       random.randint(VEIN_RATE_MIN, VEIN_RATE_MAX),
-      pt, get_images(i_store, 'vein'))
+      pt, image_store.get_images(i_store, 'vein'))
    return vein
 
 
