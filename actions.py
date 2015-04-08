@@ -76,9 +76,6 @@ def find_open_around(world, pt, distance):
    return None
 
 
-
-
-
 def create_animation_action(world, entity, repeat_count):
    def action(current_ticks):
       entity.remove_pending_action(action)
