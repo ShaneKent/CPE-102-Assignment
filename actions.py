@@ -115,6 +115,18 @@ def create_ore_transform_action(world, entity, i_store):
    return action
 
 
+def try_transform_miner(world, entity, transform):
+   new_entity = transform(world)
+   if entity != new_entity:
+      clear_pending_actions(world, entity)
+      world.remove_entity_at(entity.get_position())
+      world.add_entity(new_entity)
+      schedule_animation(world, new_entity)
+
+   return new_entity
+
+
+
 def remove_entity(world, entity):
    for action in entity.get_pending_actions():
       world.unschedule_action(action)

@@ -93,7 +93,7 @@ class WorldView:
          color = MOUSE_HOVER_OCC_COLOR
       surface.fill(color)
       if self.mouse_img:
-         surface.blit(view.mouse_img, (0, 0))
+         surface.blit(self.mouse_img, (0, 0))
 
       return surface
 

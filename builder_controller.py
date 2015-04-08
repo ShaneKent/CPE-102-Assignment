@@ -134,7 +134,7 @@ def activity_loop(view, world, i_store):
          elif event.type == pygame.MOUSEBUTTONDOWN:
             tiles = handle_mouse_button(view, world, event, entity_select,
                i_store)
-            worldview.update_view_tiles(view, tiles)
+            view.update_view_tiles(tiles)
          elif event.type == pygame.KEYDOWN:
             entity_select = handle_keydown(view, event, i_store, world,
                entity_select)

@@ -114,7 +114,8 @@ class MinerNotFull:
 
          new_entity = self
          if found:
-            new_entity = self.try_transform_miner(world)
+            new_entity = actions.try_transform_miner(world, self,
+               self.try_transform_miner)
 
          actions.schedule_action(world, new_entity,
             new_entity.create_miner_action(world, i_store),
@@ -216,7 +217,8 @@ class MinerFull:
 
          new_entity = self
          if found:
-            new_entity = self.try_transform_miner(world)
+            new_entity = actions.try_transform_miner(world, self,
+               self.try_transform_miner)
 
          actions.schedule_action(world, new_entity,
             new_entity.create_miner_action(world, i_store),
