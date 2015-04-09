@@ -101,7 +101,7 @@ class MinerNotFull:
          actions.remove_entity(world, ore)
          return ([ore_pt], True)
       else:
-         new_pt = actions.next_position(world, entity_pt, ore_pt)
+         new_pt = world.next_position(entity_pt, ore_pt)
          return (world.move_entity(self, new_pt), False)
                   
    def create_miner_action(self, world, i_store):
@@ -236,7 +236,7 @@ class MinerFull:
          self.set_resource_count(0)
          return ([], True)
       else:
-         new_pt = actions.next_position(world, entity_pt, smith_pt)
+         new_pt = world.next_position(entity_pt, smith_pt)
          return (world.move_entity(self, new_pt), False)
             
    def try_transform_miner(self, world):
@@ -308,8 +308,7 @@ class Vein:
       def action(current_ticks):
          self.remove_pending_action(action)
 
-         open_pt = actions.find_open_around(world, self.get_position(),
-            self.get_resource_distance())
+         open_pt = world.find_open_around(self.get_position(), self.get_resource_distance())
          if open_pt:
             ore = actions.create_ore(world,
                "ore - " + self.get_name() + " - " + str(current_ticks),
@@ -380,6 +379,25 @@ class Ore:
    def entity_string(self):
       return ' '.join(['ore', self.name, str(self.position.x),
          str(self.position.y), str(self.rate)])
+         
+   def create_ore_transform_action(self, world, i_store):
+      def action(current_ticks):
+         self.remove_pending_action(action)
+         blob = actions.create_blob(world, self.get_name() + " -- blob",
+            self.get_position(),
+            self.get_rate() // actions.BLOB_RATE_SCALE,
+            current_ticks, i_store)
+
+         actions.remove_entity(world, self)
+         world.add_entity(blob)
+
+         return [blob.get_position()]
+      return action
+      
+   def schedule_ore(self, world, ticks, i_store):
+      actions.schedule_action(world, self,
+         self.create_ore_transform_action(world, i_store),
+         ticks + self.get_rate())
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
@@ -543,7 +561,7 @@ class OreBlob:
          actions.remove_entity(world, vein)
          return ([vein_pt], True)
       else:
-         new_pt = actions.blob_next_position(world, entity_pt, vein_pt)
+         new_pt = world.blob_next_position(entity_pt, vein_pt)
          old_entity = world.get_tile_occupant(new_pt)
          if isinstance(old_entity, Ore):
             actions.remove_entity(world, old_entity)
@@ -626,4 +644,17 @@ class Quake:
    
    def entity_string(self):
       return 'unknown'
+      
+   def create_death_action(self, world):
+      def action(current_ticks):
+         self.remove_pending_action(action)
+         pt = self.get_position()
+         actions.remove_entity(world, self)
+         return [pt]
+      return action
+   
+   def schedule_quake(self, world, ticks):
+      actions.schedule_animation(world, self, actions.QUAKE_STEPS) 
+      actions.schedule_action(world, self, self.create_death_action(world),
+         ticks + actions.QUAKE_DURATION)
 

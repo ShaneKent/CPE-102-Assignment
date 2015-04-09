@@ -23,59 +23,10 @@ VEIN_RATE_MIN = 8000
 VEIN_RATE_MAX = 17000
 
 
+ 
+# LEAVE THESE FUNCTIONS HERE
 
-
-def sign(x):
-   if x < 0:
-      return -1
-   elif x > 0:
-      return 1
-   else:
-      return 0
-
-def next_position(world, entity_pt, dest_pt):
-   horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
-
-   if horiz == 0 or world.is_occupied(new_pt):
-      vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = Point(entity_pt.x, entity_pt.y + vert)
-
-      if vert == 0 or world.is_occupied(new_pt):
-         new_pt = Point(entity_pt.x, entity_pt.y)
-
-   return new_pt
-
-def blob_next_position(world, entity_pt, dest_pt):
-   horiz = sign(dest_pt.x - entity_pt.x)
-   new_pt = Point(entity_pt.x + horiz, entity_pt.y)
-
-   if horiz == 0 or (world.is_occupied(new_pt) and
-      not isinstance(world.get_tile_occupant(new_pt),
-      entities.Ore)):
-      vert = sign(dest_pt.y - entity_pt.y)
-      new_pt = Point(entity_pt.x, entity_pt.y + vert)
-
-      if vert == 0 or (world.is_occupied(new_pt) and
-         not isinstance(world.get_tile_occupant(new_pt),
-         entities.Ore)):
-         new_pt = Point(entity_pt.x, entity_pt.y)
-
-   return new_pt
-
-
-def find_open_around(world, pt, distance):
-   for dy in range(-distance, distance + 1):
-      for dx in range(-distance, distance + 1):
-         new_pt = Point(pt.x + dx, pt.y + dy)
-
-         if (world.within_bounds(new_pt) and
-            (not world.is_occupied(new_pt))):
-            return new_pt
-
-   return None
-
-
+#This is used by too many functions in this file.
 def create_animation_action(world, entity, repeat_count):
    def action(current_ticks):
       entity.remove_pending_action(action)
@@ -90,31 +41,7 @@ def create_animation_action(world, entity, repeat_count):
       return [entity.get_position()]
    return action
 
-
-def create_entity_death_action(world, entity):
-   def action(current_ticks):
-      entity.remove_pending_action(action)
-      pt = entity.get_position()
-      remove_entity(world, entity)
-      return [pt]
-   return action
-
-
-def create_ore_transform_action(world, entity, i_store):
-   def action(current_ticks):
-      entity.remove_pending_action(action)
-      blob = create_blob(world, entity.get_name() + " -- blob",
-         entity.get_position(),
-         entity.get_rate() // BLOB_RATE_SCALE,
-         current_ticks, i_store)
-
-      remove_entity(world, entity)
-      world.add_entity(blob)
-
-      return [blob.get_position()]
-   return action
-
-
+#Ties both of the miner classes together.
 def try_transform_miner(world, entity, transform):
    new_entity = transform(world)
    if entity != new_entity:
@@ -125,8 +52,7 @@ def try_transform_miner(world, entity, transform):
 
    return new_entity
 
-
-
+#Connected to too many different functions in many different functions.
 def remove_entity(world, entity):
    for action in entity.get_pending_actions():
       world.unschedule_action(action)
@@ -134,6 +60,8 @@ def remove_entity(world, entity):
    world.remove_entity(entity)
 
 
+
+#Used to create a blob, wouldn't be in the Blob class.
 def create_blob(world, name, pt, rate, ticks, i_store):
    blob = entities.OreBlob(name, pt, rate,
       get_images(i_store, 'blob'),
@@ -142,53 +70,42 @@ def create_blob(world, name, pt, rate, ticks, i_store):
    blob.schedule_blob(world, ticks, i_store)
    return blob
 
-
-
+#Used to create a ore, wouldn't be in the Ore class.
 def create_ore(world, name, pt, ticks, i_store):
    ore = entities.Ore(name, pt, get_images(i_store, 'ore'),
       randint(ORE_CORRUPT_MIN, ORE_CORRUPT_MAX))
-   schedule_ore(world, ore, ticks, i_store)
+   ore.schedule_ore(world, ticks, i_store)
 
    return ore
-
-
-def schedule_ore(world, ore, ticks, i_store):
-   schedule_action(world, ore,
-      create_ore_transform_action(world, ore, i_store),
-      ticks + ore.get_rate())
-
-
+   
+#Used to create a quake, wouldn't be in the Quake class.
 def create_quake(world, pt, ticks, i_store):
    quake = entities.Quake("quake", pt,
       get_images(i_store, 'quake'), QUAKE_ANIMATION_RATE)
-   schedule_quake(world, quake, ticks)
+   quake.schedule_quake(world, ticks)
    return quake
 
-
-def schedule_quake(world, quake, ticks):
-   schedule_animation(world, quake, QUAKE_STEPS) 
-   schedule_action(world, quake, create_entity_death_action(world, quake),
-      ticks + QUAKE_DURATION)
-
-
+#Used to create a vein, wouldn't be in the Vein class.
 def create_vein(world, name, pt, ticks, i_store):
    vein = entities.Vein("vein" + name,
       randint(VEIN_RATE_MIN, VEIN_RATE_MAX),
       pt, get_images(i_store, 'vein'))
    return vein
-
-
+      
+      
+      
+#Higher level function used for nearly all classes in Entity
 def schedule_action(world, entity, action, time):
    entity.add_pending_action(action)
    world.schedule_action(action, time)
 
-
+#Higher level function used for nearly all classes in Entity
 def schedule_animation(world, entity, repeat_count=0):
    schedule_action(world, entity,
       create_animation_action(world, entity, repeat_count),
       entity.get_animation_rate())
-
-
+      
+#Higher level function used for nearly all classes in Entity
 def clear_pending_actions(world, entity):
    for action in entity.get_pending_actions():
       world.unschedule_action(action)
