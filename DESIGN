@@ -300,25 +300,13 @@ save_load.py:
    save_background() - stays as a function because it deals with file writing. It may have made sense to move this to the WorldModel class, but in order to keep the organization up to par, we decided to keep this with the saving and loading file.
    load_world() - aswell as being involved in the process of loading a world. One main reason we decided to leave this as a function is because it uses global variables in the save_load module that would be difficult/unnecessarily accessed in the WorldModel class.
    add_background() - same as above functions. Could be moved to WorldModel class, makes more sense to be here for organization as well as because it uses global variables in this module.
-   add_entity() - same as above functions. Could be moved to WorldModel cla
-ss, makes more sense to be here for organization as well as because it uses glo
-bal variables in this module.
+   add_entity() - same as above functions. Could be moved to WorldModel class, makes more sense to be here for organization as well as because it uses global variables in this module.
    create_from_properties() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
-   create_miner() - makes more sense to keep this here as it doesn't
-obviously belong to any class. This function also works with alot of global var
-iables in this module.
-   create_vein() - makes more sense to keep this here as it doesn't
-obviously belong to any class. This function also works with alot of global var
-iables in this module.
-   create_ore() - makes more sense to keep this here as it doesn't
-obviously belong to any class. This function also works with alot of global var
-iables in this mod;ule.
-   create_blacksmith() - makes more sense to keep this here as it doesn't
-obviously belong to any class. This function also works with alot of global var
-iables in this module.
-   create_obstacle() - makes more sense to keep this here as it doesn't
-obviously belong to any class. This function also works with alot of global var
-iables in this module.
+   create_miner() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
+   create_vein() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
+   create_ore() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this mod;ule.
+   create_blacksmith() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
+   create_obstacle() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
    schedule_entity() - This probably could have been reworked to be methods for the MinerNotFull, Vein, and Ore classes. However, it would have required a lot of reworking of our code because every other entity class would have needed a version of this function that wouldn't do anything. It makes more sense to leave this here as a function until we can use inheritance.
 
 worldmodel.py
