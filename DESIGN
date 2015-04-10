@@ -168,65 +168,58 @@ Functions Not Turned into Methods:
 ***********************************
 
 actions.py:
-   sign()
-   next_position()
-   blob_next_position()
-   find_open_around()
-   create_animation_action()
-   create_entity_death_action()
-   create_ore_transform_action()
-   remove_entity() 
-   create_blob()
-   create_ore()
-   schedule_ore()
-   create_quake()
-   schedule_quake()
-   create_vein()
-   schedule_action()
-   schedule_animation()
-   clear_pending_actions()
+   create_animation_action() -
+   try_transform_miner() -
+   remove_entity() -
+   create_blob() -
+   create_ore() -
+   create_quake() -
+   create_vein() -
+   schedule_action() -
+   schedule_animation() -
+   clear_pending_actions() -
 
 builder_controller.py:
-   mouse_to_tile()
-   save_world()
-   load_world()
-   on_keydown()
-   handle_mouse_motion()
-   handle_keydown()
-   create_new_entity()
-   is_background_tile()
-   handle_mouse_button()
-   activity_loop()
+   mouse_to_tile() -
+   save_world() -
+   load_world() -
+   on_keydown() -
+   handle_mouse_motion() -
+   handle_keydown() -
+   create_new_entity() -
+   is_background_tile() -
+   handle_mouse_button() -
+   activity_loop() -
 
 builder.py:
-   create_default_background()
-   main()
+   create_default_background() -
+   main() -
 
 controller.py:
-   on_keydown()
-   mouse_to_tile()
-   handle_timer_event()
-   handle_mouse_motion()
-   handle_keydown()
-   activity_loop()
+   on_keydown() -
+   mouse_to_tile() -
+   handle_timer_event() -
+   handle_mouse_motion() -
+   handle_keydown() -
+   activity_loop() -
 
 entities.py:
    *Consists of soley methods*
 
 image_store.py:
-   create_default_image()
-   load_images()
-   process_image_line()
-   get_images_internal()
-   get_images()
+   create_default_image() -
+   load_images() -
+   process_image_line() -
+   get_images_internal() -
+   get_images() -
    
 keys.py:
    *Consists of enums*
 
 main.py:
-   create_default_background()
-   load_world()
-   main()
+   create_default_background() -
+   load_world() -
+   main() -
 
 mouse_buttons.py:
    *Consists of enums*
@@ -236,31 +229,34 @@ occ_grid.py:
 
 ordered_list.py:
    class ListItem:
-      __eq__()
+      __eq__() -
 
 point.py:
-   *Consists of soley methods*
+   sign(x) - left as a function because it only performs logic and doesn't relate to any entity or abstract object
 
 save_load.py:
-   save_world()
-   save_entities()
-   save_background()
-   load_world()
-   add_background()
-   add_entity()
-   create_from_properties()
-   create_miner()
-   create_vein()
-   create_ore()
-   create_blacksmith()
-   create_obstacle()
-   schedule_entity()
+   save_world() -
+   save_entities() -
+   save_background() -
+   load_world() -
+   add_background() -
+   add_entity() -
+   create_from_properties() -
+   create_miner() -
+   create_vein() -
+   create_ore() -
+   create_blacksmith() -
+   create_obstacle() -
+   schedule_entity() -
 
 worldmodel.py
-
+   nearest_entity() - left as a function because 
 
 worldview.py:
-
+   viewport_to_world() - 
+   world_to_viewport() -
+   clamp() -
+   create_shifted_viewport() -    
 
 
 
