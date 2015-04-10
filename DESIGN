@@ -236,16 +236,17 @@ actions.py:
    clear_pending_actions() - left a function because it doesn't belong to a specific entity type
 
 builder_controller.py:
-   mouse_to_tile() - 
-   save_world() -
-   load_world() -
-   on_keydown() -
-   handle_mouse_motion() -
-   handle_keydown() -
-   create_new_entity() -
-   is_background_tile() -
-   handle_mouse_button() -
-   activity_loop() -
+   mouse_to_tile() - left as a function because it has one use, to return the mouses position in the grid
+   save_world() - left as a function because it has one use, to open a file and save the status of the "world"
+   load_world() - left as a function because it has one use, to open a file and call another function
+   on_keydown() - left as a function because it has one use, to determine the event key selected 
+   handle_mouse_motion() - left as a function because it has one use, to manage the motion of the mouse
+   handle_keydown() - left as a function because it has one use, to handle the determined key event
+   create_new_entity() - left as a function because it has one use, to create an enitity at a specified point 
+   is_background_tile() - left as a function because it has one use, to the specified background tag
+   handle_mouse_button() - left as a function because it has one use, to use the 
+                           mouse and events to interact with entities and determine the resulting actions 
+   activity_loop() - left as a function because it serves to keep the actions and events in a loop
 
 builder.py:
    create_default_background() - left as a function because it just returns an image, doesn't depend on an object
@@ -286,7 +287,7 @@ occ_grid.py:
    *Consists soley of methods*
 
 ordered_list.py:
-   *No functions left*
+   *Consists soley of methods*
 
 point.py:
    sign(x) - left as a function because it only performs logic and doesn't relate to any entity
