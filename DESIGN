@@ -295,28 +295,40 @@ point.py:
              or abstract object
 
 save_load.py:
-   save_world() -
-   save_entities() -
-   save_background() -
-   load_world() -
-   add_background() -
-   add_entity() -
-   create_from_properties() -
-   create_miner() -
-   create_vein() -
-   create_ore() -
-   create_blacksmith() -
-   create_obstacle() -
-   schedule_entity() -
+   save_world() - this stays as a function because it is connected to two other functions in this file. It could be moved to the WorldModel class possibly. However as an origanizational decision it makes sense to keep this in the file responsible for saving and loading.
+   save_entities() - stays as a function because it deals with file writing and saving which makes sense for this file. Same as the above, it could have been moved to the WorldModel class but it makes sense to leave it in saving and loading file.
+   save_background() - stays as a function because it deals with file writing. It may have made sense to move this to the WorldModel class, but in order to keep the organization up to par, we decided to keep this with the saving and loading file.
+   load_world() - aswell as being involved in the process of loading a world. One main reason we decided to leave this as a function is because it uses global variables in the save_load module that would be difficult/unnecessarily accessed in the WorldModel class.
+   add_background() - same as above functions. Could be moved to WorldModel class, makes more sense to be here for organization as well as because it uses global variables in this module.
+   add_entity() - same as above functions. Could be moved to WorldModel cla
+ss, makes more sense to be here for organization as well as because it uses glo
+bal variables in this module.
+   create_from_properties() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
+   create_miner() - makes more sense to keep this here as it doesn't
+obviously belong to any class. This function also works with alot of global var
+iables in this module.
+   create_vein() - makes more sense to keep this here as it doesn't
+obviously belong to any class. This function also works with alot of global var
+iables in this module.
+   create_ore() - makes more sense to keep this here as it doesn't
+obviously belong to any class. This function also works with alot of global var
+iables in this mod;ule.
+   create_blacksmith() - makes more sense to keep this here as it doesn't
+obviously belong to any class. This function also works with alot of global var
+iables in this module.
+   create_obstacle() - makes more sense to keep this here as it doesn't
+obviously belong to any class. This function also works with alot of global var
+iables in this module.
+   schedule_entity() - This probably could have been reworked to be methods for the MinerNotFull, Vein, and Ore classes. However, it would have required a lot of reworking of our code because every other entity class would have needed a version of this function that wouldn't do anything. It makes more sense to leave this here as a function until we can use inheritance.
 
 worldmodel.py
    nearest_entity() - left as a function because it doesn't refer to a commonly used data type and it performs logic that is used to assist other functions
 
 worldview.py:
-   viewport_to_world() - 
-   world_to_viewport() -
-   clamp() -
-   create_shifted_viewport() -    
+   viewport_to_world() - left as a function (in worldview specifically) because it deals with viewport information and specific point information. None of which would be an ideal location to hold this function as a method. Instead this method works with a combination of pygame objects and our defined function.
+   world_to_viewport() - same as above. left as a function because it deals with viewport information and point information. This is a mixture of pygame objects and our objects thus it would be difficult to move to a class at this point in time.
+   clamp() - this function is very ambiguous for what information it can work on, thus it is safe and smart to leave it as a function for any and all other functions/methods to use if they need it. Plus, this function is mainly used in worldview.py so it doesn't make sense to put it anywhere else.
+   create_shifted_viewport() - this stays as a function because it deals with pygame objects and wouldn't really fit anywhere else.
 
 
 
