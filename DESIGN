@@ -248,8 +248,9 @@ builder_controller.py:
    activity_loop() -
 
 builder.py:
-   create_default_background() - 
-   main() -
+   create_default_background() - left as a function because it just returns an image, doesn't depend on an object
+   main() - left as a function because the main function doesn't depend on a specific object and 
+            doesn't take in any parameters
 
 controller.py:
    on_keydown() - 
