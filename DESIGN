@@ -266,8 +266,8 @@ entities.py:
    *Consists soley of methods*
 
 image_store.py:
-   create_default_image() -
-   load_images() -
+   create_default_image() - left as a function because it has one use, to create a default image
+   load_images() - left as a function because it has one use, to return a directory of images
    process_image_line() -
    get_images_internal() -
    get_images() -
