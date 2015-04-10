@@ -273,9 +273,10 @@ keys.py:
    *Consists of enums*
 
 main.py:
-   create_default_background() -
-   load_world() -
-   main() -
+   create_default_background() - left as a function because it just returns an image, doesn't depend on an object
+   load_world() - left as a function because it has one use, to open a file and call another function
+   main() - left as a function because the main function doesn't depend on a specific object and 
+            doesn't take in any parameters
 
 mouse_buttons.py:
    *Consists of enums*
@@ -287,7 +288,8 @@ ordered_list.py:
    *No functions left*
 
 point.py:
-   sign(x) - left as a function because it only performs logic and doesn't relate to any entity or abstract object
+   sign(x) - left as a function because it only performs logic and doesn't relate to any entity
+             or abstract object
 
 save_load.py:
    save_world() -
@@ -305,7 +307,7 @@ save_load.py:
    schedule_entity() -
 
 worldmodel.py
-   nearest_entity() - left as a function because 
+   nearest_entity() - left as a function because it doesn't refer to a commonly used data type and it performs logic that is used to assist other functions
 
 worldview.py:
    viewport_to_world() - 
