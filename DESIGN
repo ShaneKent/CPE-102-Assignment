@@ -168,19 +168,19 @@ Functions Not Turned into Methods:
 ***********************************
 
 actions.py:
-   create_animation_action() -
-   try_transform_miner() -
-   remove_entity() -
-   create_blob() -
-   create_ore() -
-   create_quake() -
-   create_vein() -
-   schedule_action() -
-   schedule_animation() -
-   clear_pending_actions() -
+   create_animation_action() - left a function because it doesn't belong to a specific entity type
+   try_transform_miner() - left a function because it doesn't belong to a specific entity type
+   remove_entity() - left a function because it doesn't belong to a specific entity type
+   create_blob() - left a function because doesn't belong in the Blob class and simply creates and returns a blob
+   create_ore() -  left a function because doesn't belong in the Ore class and simply creates and returns an ore
+   create_quake() - left a function because doesn't belong in the Quake class and simply creates and returns a quake
+   create_vein() - left a function because doesn't belong in the Vein class and simply creates and returns a vein
+   schedule_action() - left a function because it doesn't belong to a specific entity type
+   schedule_animation() - left a function because it doesn't belong to a specific entity type
+   clear_pending_actions() - left a function because it doesn't belong to a specific entity type
 
 builder_controller.py:
-   mouse_to_tile() -
+   mouse_to_tile() - 
    save_world() -
    load_world() -
    on_keydown() -
@@ -192,11 +192,11 @@ builder_controller.py:
    activity_loop() -
 
 builder.py:
-   create_default_background() -
+   create_default_background() - 
    main() -
 
 controller.py:
-   on_keydown() -
+   on_keydown() - 
    mouse_to_tile() -
    handle_timer_event() -
    handle_mouse_motion() -
