@@ -268,9 +268,9 @@ entities.py:
 image_store.py:
    create_default_image() - left as a function because it has one use, to create a default image
    load_images() - left as a function because it has one use, to return a directory of images
-   process_image_line() -
-   get_images_internal() -
-   get_images() -
+   process_image_line() - stays as a function because there is no class that would better represent it. Also, it has one job, to process an image file... how boring....
+   get_images_internal() - lame function. Doesn't have much use for another class because it is only dealing with the organization of images.
+   get_images() - this function returns the image at a specific key. Thus, there isn't any class that would better suit this function.
    
 keys.py:
    *Consists of enums*
@@ -302,11 +302,11 @@ save_load.py:
    add_background() - same as above functions. Could be moved to WorldModel class, makes more sense to be here for organization as well as because it uses global variables in this module.
    add_entity() - same as above functions. Could be moved to WorldModel class, makes more sense to be here for organization as well as because it uses global variables in this module.
    create_from_properties() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
-   create_miner() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
-   create_vein() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
-   create_ore() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this mod;ule.
-   create_blacksmith() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
-   create_obstacle() - makes more sense to keep this here as it doesn'tobviously belong to any class. This function also works with alot of global variables in this module.
+   create_miner() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
+   create_vein() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
+   create_ore() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this mod;ule.
+   create_blacksmith() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
+   create_obstacle() - makes more sense to keep this here as it doesn't obviously belong to any class. This function also works with alot of global variables in this module.
    schedule_entity() - This probably could have been reworked to be methods for the MinerNotFull, Vein, and Ore classes. However, it would have required a lot of reworking of our code because every other entity class would have needed a version of this function that wouldn't do anything. It makes more sense to leave this here as a function until we can use inheritance.
 
 worldmodel.py
