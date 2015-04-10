@@ -162,6 +162,62 @@ methods:
    next_image()
    entity_string()
 
+class: WorldModel
+methods:
+   __init__()
+   within_bounds()
+   is_occupied()
+   find_nearest()
+   add_entity()
+   move_entity()
+   remove_entity()
+   remove_entity_at()
+   schedule_action()
+   unschedule_action()
+   update_on_time()
+   get_background_time()
+   get_background()
+   set_background()
+   get_tile_occupant()
+   get_entities()
+   next_position()
+   blob_next_position()
+   find_open_around()
+
+class: WorldView
+methods:
+   __init__()
+   draw_background()
+   draw_entities()
+   draw_viewport()
+   update_view()
+   update_view_tiles()
+   update_tile()
+   get_tile_image()
+   create_mouse_surface()
+   update_mouse_cursor()
+   mouse_move()
+
+class: Grid
+methods:
+   __init__()
+   set_cell()
+   get_cell()
+
+class: OrderedList
+methods:
+   __init__()
+   insert()
+   remove()
+   head()
+   pop()
+
+class: ListItem
+methods:
+   __init__()
+   __eq__()
+
+
 
 ***********************************
 Functions Not Turned into Methods:
@@ -204,7 +260,7 @@ controller.py:
    activity_loop() -
 
 entities.py:
-   *Consists of soley methods*
+   *Consists soley of methods*
 
 image_store.py:
    create_default_image() -
@@ -225,11 +281,10 @@ mouse_buttons.py:
    *Consists of enums*
 
 occ_grid.py:
-   *Consists of soley methods*
+   *Consists soley of methods*
 
 ordered_list.py:
-   class ListItem:
-      __eq__() -
+   *No functions left*
 
 point.py:
    sign(x) - left as a function because it only performs logic and doesn't relate to any entity or abstract object
