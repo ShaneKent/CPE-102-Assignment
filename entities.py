@@ -26,52 +26,23 @@ class Entity:
 /////////
 
 class GridItem(Entity):
-   def __init__():
+   def __init__(self, name, imgs, position):
       super(GridItem, self).__init__(name, imgs)
-
-
-/////////
-
-
-class Background(Entity):
-   def __init__(self, name, imgs):
-      super(Background, self).__init__(name, imgs)
-   
-////////
-
-
-class MinerNotFull(Entity):
-   def __init__(self, name, resource_limit, position, rate, imgs,
-      animation_rate):
-      super(MinerNotFull, self).__init__(name, imgs)
       self.position = position
-      self.rate = rate
-      self.resource_limit = resource_limit
-      self.resource_count = 0
-      self.animation_rate = animation_rate
-      self.pending_actions = []
-      
+
    def set_position(self, point):
       self.position = point
 
    def get_position(self):
       return self.position
-      
-   def get_rate(self):
-      return self.rate
-      
-   def set_resource_count(self, n):
-      self.resource_count = n
-      
-   def get_resource_count(self):
-      return self.resource_count
-      
-   def get_resource_limit(self):
-      return self.resource_limit
-      
-   def get_animation_rate(self):
-      return self.animation_rate
-      
+
+/////////
+
+class Occupant(GridItem):
+   def __init__(self, name, imgs, position):
+      super(Occupant, self).__init__(name, imgs, position)
+      self.pending_actions = []
+    
    def remove_pending_action(self, action):
       if hasattr(self, "pending_actions"):
          self.pending_actions.remove(action)
@@ -89,6 +60,49 @@ class MinerNotFull(Entity):
    def clear_pending_actions(self):
       if hasattr(self, "pending_actions"):
          self.pending_actions = []
+
+
+///////////////
+
+class Miner(Occupant):
+   def __init__(self, name, imgs, position, rate, resource_limit, animation_rate):
+      super(Miner, self).__init__(name, imgs, position)
+      self.rate = rate
+      self.resource_limit = resource_limit
+      self.animation_rate = animation_rate
+      self.resource_count = 0
+      
+   def get_rate(self):
+      return self.rate
+      
+   def set_resource_count(self, n):
+      self.resource_count = n
+
+   def get_resource_count(self):
+      return self.resource_count
+ 
+   def get_resource_limit(self):
+      return self.resource_limit
+      
+   def get_animation_rate(self):
+      return self.animation_rate
+
+
+
+///////////////
+
+
+class Background(Entity):
+   def __init__(self, name, imgs):
+      super(Background, self).__init__(name, imgs)
+   
+////////
+
+
+class MinerNotFull(Miner):
+   def __init__(self, name, resource_limit, position, rate, imgs,
+      animation_rate):
+      super(MinerNotFull, self).__init__(name, imgs, position, rate, resource_limit, animation_rate)
       
    def entity_string(self):
       return ' '.join(['miner', self.name, str(self.position.x),
@@ -145,55 +159,11 @@ class MinerNotFull(Entity):
 
 /////////
    
-class MinerFull(Entity):
+class MinerFull(Miner):
    def __init__(self, name, resource_limit, position, rate, imgs,
       animation_rate):
-      super(MinerFull, self).__init__(name, imgs)
-      self.position = position
-      self.rate = rate
-      self.resource_limit = resource_limit
+      super(MinerFull, self).__init__(name, imgs, position, rate, resource_limit, animation_rate)
       self.resource_count = resource_limit
-      self.animation_rate = animation_rate
-      self.pending_actions = []
-      
-   def set_position(self, point):
-      self.position = point
-      
-   def get_position(self):
-      return self.position
-      
-   def get_rate(self):
-      return self.rate
-      
-   def set_resource_count(self, n):
-      self.resource_count = n
-      
-   def get_resource_count(self):
-      return self.resource_count
-      
-   def get_resource_limit(self):
-      return self.resource_limit
-      
-   def get_animation_rate(self):
-      return self.animation_rate
-   
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
 
    def create_miner_action(self, world, i_store):
       def action(current_ticks):
@@ -238,43 +208,17 @@ class MinerFull(Entity):
 ///////////
 
       
-class Vein(Entity):
+class Vein(Occupant):
    def __init__(self, name, rate, position, imgs, resource_distance=1):
-      super(Vein, self).__init__(name, imgs)
-      self.position = position
+      super(Vein, self).__init__(name, imgs, position)
       self.rate = rate
       self.resource_distance = resource_distance
-      self.pending_actions = []
-   
-   def set_position(self, point):
-      self.position = point
 
-   def get_position(self):
-      return self.position
-      
    def get_rate(self):
       return self.rate
       
    def get_resource_distance(self):
       return self.resource_distance
-      
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
 
    def entity_string(self):
       return ' '.join(['vein', self.name, str(self.position.x),
@@ -307,39 +251,13 @@ class Vein(Entity):
  
 /////////////
   
-class Ore(Entity):
+class Ore(Occupant):
    def __init__(self, name, position, imgs, rate=5000):
-      super(Ore, self).__init__(name, imgs)
-      self.position = position
+      super(Ore, self).__init__(name, imgs, position)
       self.rate = rate
-      self.pending_actions = []
-   
-   def set_position(self, point):
-      self.position = point
-
-   def get_position(self):
-      return self.position
       
    def get_rate(self):
       return self.rate
-      
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
    
    def entity_string(self):
       return ' '.join(['ore', self.name, str(self.position.x),
@@ -367,22 +285,14 @@ class Ore(Entity):
 ///////////
 
 
-class Blacksmith(Entity):
+class Blacksmith(Occupant):
    def __init__(self, name, position, imgs, resource_limit, rate,
       resource_distance=1):
-      super(Blacksmith, self).__init__(name, imgs)
-      self.position = position
+      super(Blacksmith, self).__init__(name, imgs, position)
       self.resource_limit = resource_limit
       self.resource_count = 0
       self.rate = rate
       self.resource_distance = resource_distance
-      self.pending_actions = []
-   
-   def set_position(self, point):
-      self.position = point
-   
-   def get_position(self):
-      return self.position
       
    def get_rate(self):
       return self.rate
@@ -398,24 +308,6 @@ class Blacksmith(Entity):
       
    def get_resource_distance(self):
       return self.resource_distance
-      
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
 
    def entity_string(self):
       return ' '.join(['blacksmith', self.name, str(self.position.x),
@@ -426,16 +318,9 @@ class Blacksmith(Entity):
 ///////////////
 
 
-class Obstacle(Entity):
+class Obstacle(GridItem):
    def __init__(self, name, position, imgs):
-      super(Obstacle, self).__init__(name, imgs)
-      self.position = position
-      
-   def set_position(self, point):
-      self.position = point
-
-   def get_position(self):
-      return self.position
+      super(Obstacle, self).__init__(name, imgs, position)
 
    def entity_string(self):
       return ' '.join(['obstacle', self.name, str(self.position.x),
@@ -445,43 +330,17 @@ class Obstacle(Entity):
 
 
 
-class OreBlob(Entity):
+class OreBlob(Occupant):
    def __init__(self, name, position, rate, imgs, animation_rate):
-      super(OreBlob, self).__init__(name, imgs)
-      self.position = position
+      super(OreBlob, self).__init__(name, imgs, position)
       self.rate = rate
       self.animation_rate = animation_rate
-      self.pending_actions = []
-   
-   def set_position(self, point):
-      self.position = point
-   
-   def get_position(self):
-      return self.position
       
    def get_rate(self):
       return self.rate
       
    def get_animation_rate(self):
       return self.animation_rate
-      
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
       
    def blob_to_vein(self, world, vein):
       entity_pt = self.get_position()
@@ -528,39 +387,13 @@ class OreBlob(Entity):
 
 /////////////////
 
-class Quake(Entity):
+class Quake(Occupant):
    def __init__(self, name, position, imgs, animation_rate):
-      super(Quake, self).__init__(name, imgs)
-      self.position = position
+      super(Quake, self).__init__(name, imgs, position)
       self.animation_rate = animation_rate
-      self.pending_actions = []
-
-   def set_position(self, point):
-      self.position = point
-   
-   def get_position(self):
-      return self.position   
       
    def get_animation_rate(self):
       return self.animation_rate
-   
-   def remove_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.remove(action)
-
-   def add_pending_action(self, action):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions.append(action)
-
-   def get_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         return self.pending_actions
-      else:
-         return []
-
-   def clear_pending_actions(self):
-      if hasattr(self, "pending_actions"):
-         self.pending_actions = []
 
    def create_death_action(self, world):
       def action(current_ticks):
