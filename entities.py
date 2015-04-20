@@ -1,7 +1,7 @@
 import point
 import actions
 
-class Entity:
+class Entity(object):
    def __init__(self, name, imgs):
       self.name = name
       self.imgs = imgs
@@ -23,7 +23,7 @@ class Entity:
       return 'unknown'
 
 
-/////////
+
 
 class GridItem(Entity):
    def __init__(self, name, imgs, position):
@@ -36,7 +36,7 @@ class GridItem(Entity):
    def get_position(self):
       return self.position
 
-/////////
+
 
 class Occupant(GridItem):
    def __init__(self, name, imgs, position):
@@ -62,7 +62,7 @@ class Occupant(GridItem):
          self.pending_actions = []
 
 
-///////////////
+
 
 class Miner(Occupant):
    def __init__(self, name, imgs, position, rate, resource_limit, animation_rate):
@@ -86,17 +86,31 @@ class Miner(Occupant):
       
    def get_animation_rate(self):
       return self.animation_rate
+      
+   def next_position(self, world, dest_pt):
+      entity_pt = self.get_position()
+      horiz = point.sign(dest_pt.x - entity_pt.x)
+      new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
+
+      if horiz == 0 or world.is_occupied(new_pt):
+         vert = point.sign(dest_pt.y - entity_pt.y)
+         new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
+
+         if vert == 0 or world.is_occupied(new_pt):
+            new_pt = point.Point(entity_pt.x, entity_pt.y)
+
+      return new_pt
 
 
 
-///////////////
+
 
 
 class Background(Entity):
    def __init__(self, name, imgs):
       super(Background, self).__init__(name, imgs)
    
-////////
+
 
 
 class MinerNotFull(Miner):
@@ -119,7 +133,7 @@ class MinerNotFull(Miner):
          actions.remove_entity(world, ore)
          return ([ore_pt], True)
       else:
-         new_pt = world.next_position(entity_pt, ore_pt)
+         new_pt = self.next_position(world, ore_pt)
          return (world.move_entity(self, new_pt), False)
                   
    def create_miner_action(self, world, i_store):
@@ -157,7 +171,7 @@ class MinerNotFull(Miner):
          ticks + self.get_rate())
       actions.schedule_animation(world, self)
 
-/////////
+
    
 class MinerFull(Miner):
    def __init__(self, name, resource_limit, position, rate, imgs,
@@ -194,7 +208,7 @@ class MinerFull(Miner):
          self.set_resource_count(0)
          return ([], True)
       else:
-         new_pt = world.next_position(entity_pt, smith_pt)
+         new_pt = self.next_position(world, smith_pt)
          return (world.move_entity(self, new_pt), False)
             
    def try_transform_miner(self, world):
@@ -205,7 +219,7 @@ class MinerFull(Miner):
 
       return new_entity
 
-///////////
+
 
       
 class Vein(Occupant):
@@ -249,7 +263,7 @@ class Vein(Occupant):
       actions.schedule_action(world, self, self.create_vein_action(world, i_store),
          ticks + self.get_rate())
  
-/////////////
+
   
 class Ore(Occupant):
    def __init__(self, name, position, imgs, rate=5000):
@@ -282,7 +296,7 @@ class Ore(Occupant):
          self.create_ore_transform_action(world, i_store),
          ticks + self.get_rate())
 
-///////////
+
 
 
 class Blacksmith(Occupant):
@@ -315,7 +329,7 @@ class Blacksmith(Occupant):
          str(self.rate), str(self.resource_distance)])
 
 
-///////////////
+
 
 
 class Obstacle(GridItem):
@@ -326,7 +340,7 @@ class Obstacle(GridItem):
       return ' '.join(['obstacle', self.name, str(self.position.x),
          str(self.position.y)])
          
-////////////////
+
 
 
 
@@ -351,7 +365,7 @@ class OreBlob(Occupant):
          actions.remove_entity(world, vein)
          return ([vein_pt], True)
       else:
-         new_pt = world.blob_next_position(entity_pt, vein_pt)
+         new_pt = self.blob_next_position(world, vein_pt)
          old_entity = world.get_tile_occupant(new_pt)
          if isinstance(old_entity, Ore):
             actions.remove_entity(world, old_entity)
@@ -384,8 +398,26 @@ class OreBlob(Occupant):
          ticks + self.get_rate())
       actions.schedule_animation(world, self)
       
+   def blob_next_position(self, world, dest_pt):
+      entity_pt = self.get_position()
+      horiz = point.sign(dest_pt.x - entity_pt.x)
+      new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
 
-/////////////////
+      if horiz == 0 or (self.is_occupied(new_pt) and
+         not isinstance(self.get_tile_occupant(new_pt),
+         entities.Ore)):
+         vert = point.sign(dest_pt.y - entity_pt.y)
+         new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
+
+         if vert == 0 or (self.is_occupied(new_pt) and
+            not isinstance(self.get_tile_occupant(new_pt),
+            entities.Ore)):
+            new_pt = point.Point(entity_pt.x, entity_pt.y)
+
+      return new_pt
+      
+
+
 
 class Quake(Occupant):
    def __init__(self, name, position, imgs, animation_rate):
