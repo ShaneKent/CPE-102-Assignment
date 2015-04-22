@@ -403,15 +403,15 @@ class OreBlob(Occupant):
       horiz = point.sign(dest_pt.x - entity_pt.x)
       new_pt = point.Point(entity_pt.x + horiz, entity_pt.y)
 
-      if horiz == 0 or (self.is_occupied(new_pt) and
-         not isinstance(self.get_tile_occupant(new_pt),
-         entities.Ore)):
+      if horiz == 0 or (world.is_occupied(new_pt) and
+         not isinstance(world.get_tile_occupant(new_pt),
+         Ore)):
          vert = point.sign(dest_pt.y - entity_pt.y)
          new_pt = point.Point(entity_pt.x, entity_pt.y + vert)
 
-         if vert == 0 or (self.is_occupied(new_pt) and
-            not isinstance(self.get_tile_occupant(new_pt),
-            entities.Ore)):
+         if vert == 0 or (world.is_occupied(new_pt) and
+            not isinstance(world.get_tile_occupant(new_pt),
+            Ore)):
             new_pt = point.Point(entity_pt.x, entity_pt.y)
 
       return new_pt
